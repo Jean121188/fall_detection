@@ -5,16 +5,21 @@
   10 segundos = 6250 amostas
   *Send long data with POST
   https://github.com/me-no-dev/ESPAsyncWebServer/issues/337
+
+  Listas
+  A ideia é boa mas a amostragem é muito rápida
 */
 #include <Arduino.h>
 #include "sensor.h"
 #include "comunicacao.h"
+#include "List.hpp"
 
 #define BUFFER  3000
 
 unsigned long previousMillis = 0;
 unsigned long secoundMillis = 0;
-boolean CONTIN = true;
+boolean contne = true;
+List<String> results;
 
 void setup() {
   Serial.begin(115200);
@@ -32,19 +37,17 @@ void setup() {
 
 void loop() {
   unsigned long currentMillis = millis();
-  
-  if(CONTIN)
+
+  if(contne)
   {
-    CONTIN = false;
-    // char* msg = (char*)malloc(BUFFER);
-    Sample(BUFFER);
-    // free(msg);
-    Serial.print("Finish\n");
+    contne = false;
+    results = Sample(BUFFER);
+    //PrintDados(results);
   }
 
   if ((unsigned long)(currentMillis - previousMillis) >= 5000) // entra a cada 5 segundo
   {
-     CONTIN = true;
+     contne = true;
      previousMillis = currentMillis;
   }
 }

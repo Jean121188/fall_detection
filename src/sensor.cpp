@@ -43,21 +43,34 @@ void Init_ADXL345(void){
     adxl.setInterrupt(ADXL345_INT_INACTIVITY_BIT, 1);
 }
 
-char* Sample(int buffer){
+lista Sample(int buffer){
+    List<String> dados(buffer); // Cria uma lista chamada dados que contem o tamanho de buffer;
     int x, y, z;
+    String xS, yS, zS;
+    String separator = ";";
+    String terminator = "fall\n";
     int cont = 0;
-    char* sample = "";
-    char* amount = "";
+    Serial.print("aqui\n");
 
     while(cont <= buffer)
     {
         adxl.readXYZ(&x, &y, &z);
-        sprintf(sample, "%i;%i;%i;", x, y, z); // "36;56;88;"
-        strcat(amount, sample); //char *strcat(char *dest, const char *src) Acrescenta src ao final da dest.
+        xS = x; dados.add(xS); dados.add(separator);
+        yS = y; dados.add(yS); dados.add(separator);
+        zS = z; dados.add(zS); dados.add(separator);
         cont++;
-        delayMicroseconds(16);
+        delayMicroseconds(16); // 62.5Hz
     }
-    cont = 0;
-    Serial.print(amount);
-    return amount;
+    dados.add(terminator);
+    Serial.print("sai\n");
+    return dados;
+}
+
+void PrintDados(lista listDat){
+    size_t tamLista = listDat.getSize();
+    Serial.printf("tamanho da lista: %i\n", tamLista);
+    for(int i = 0; i < tamLista; i++){
+        Serial.print(listDat.getValue(i));
+    }
+    Serial.print("terminou...\n");
 }
