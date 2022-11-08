@@ -18,8 +18,9 @@
 
 unsigned long previousMillis = 0;
 unsigned long secoundMillis = 0;
-boolean contne = true;
+boolean contne = true, contprint = false;
 List<String> results;
+int* pDados = (int*)malloc(BUFFER_SIZE);
 
 void setup() {
   Serial.begin(115200);
@@ -36,18 +37,20 @@ void setup() {
 }
 
 void loop() {
-  unsigned long currentMillis = millis();
-
+  
   if(contne)
   {
     contne = false;
-    results = Sample(BUFFER);
-    //PrintDados(results);
+    pDados = Sample(BUFFER);
+    contprint = true;
   }
 
-  if ((unsigned long)(currentMillis - previousMillis) >= 5000) // entra a cada 5 segundo
-  {
-     contne = true;
-     previousMillis = currentMillis;
+  if(contprint){
+    contprint = false;
+    //results = PrintDados(pDados);
+    Serial.printf("Size of results: %i\n", sizeof(results));
+    contne = true;
+    free(pDados);
   }
+    
 }

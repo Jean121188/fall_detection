@@ -10,7 +10,7 @@ typedef List<String> lista;
 
 #define BUFFER_SIZE     3000
 void Init_ADXL345(void);
-lista Sample(int buffer);
-void PrintDados(lista listDat);
+int *Sample(int buffer);
+lista PrintDados(int *listDat);
 
 #endif
